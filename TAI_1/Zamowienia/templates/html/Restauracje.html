@@ -1,0 +1,51 @@
+<!--Aplikacja Webowa autorstwa Mateusza Szmyta-->
+{% extends "html/Baza_strony.html" %}
+{% load static %}
+{% block content %}
+<script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>		
+	
+	
+	<article style="position:relative; min-height: 500px;
+	height: auto;">
+		
+		<section style="min-height: 500px;
+	height: auto;">
+			<div class="sign_container">
+				<div class="form_box">
+						<h2>Oto lista restauracji, których potrawy możesz u nas zamówić:</h2>
+						<div id='test'></div>
+						<!--Fajnie byłoby to odczytać z bazy danych-->
+						<script>
+						$.getJSON('http://127.0.0.1:8000/api/restauracje', function(data) {
+							var student = '';
+							var i = 0;
+							for (index in data.content) {
+							//alert(index);
+							if(i%4==0){
+								student += '<table width="50%" style="width:100%; border: black 1px solid;">';
+							}
+							//student += '<td>' + data.content[index].pos_id + '</td>';
+							student += '<td style="border: black 1px solid; width:10%; height:10%;">' ;
+							student += '{% csrf_token %}'
+							student += '<img src="data:image/png;base64,'+data.content[index].logo+'" style=" margin-right:1%; width:60%; height:60%;" />'
+							student += '<div style="color:white; ">';
+							student += data.content[index].nazwa;
+							student += '</div>';
+							student += '</td>';
+							if(i+2%4==0){
+								student += '</table>';
+							}
+							i++;
+							//alert(data.content[index].Nazwa);
+							}
+							$('#test').append(student);
+							});
+            </script>
+				</div>
+
+			</div>
+		</section>
+	</article>
+{% endblock  %}

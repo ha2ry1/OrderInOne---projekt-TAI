@@ -1,0 +1,236 @@
+<!--Aplikacja Webowa autorstwa Mateusza Szmyta-->
+{% extends "html/Baza_strony.html" %}
+{% load static %}
+{% block content %}
+<script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>	
+	
+	<article style="position:relative; min-height: 500px;
+	height: auto;">
+		
+		<section style="min-height: 500px;
+	height: auto;">
+			<div class="sign_container">
+				<div class="form_box">
+						<h2>Menu</h2>
+						<div id='test'></div>
+
+				<script>
+				loadpage()
+				
+				function doFilter(){
+					if (document.getElementById('burger').checked)
+					document.cookie="burger=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+					document.cookie="burger=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('wrap').checked)
+						document.cookie="wrap=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="wrap=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('pizza').checked)
+						document.cookie="pizza=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="pizza=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('fish').checked)
+						document.cookie="fish=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="fish=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('chicken').checked)
+						document.cookie="chicken=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="chicken=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('fries').checked)
+						document.cookie="fries=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="fries=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('salad').checked)
+						document.cookie="salad=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="salad=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('sweet').checked)
+						document.cookie="sweet=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="sweet=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					if (document.getElementById('dip').checked)
+						document.cookie="dip=1;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					else
+						document.cookie="dip=0;expires=Wed, 18 Dec 2026 12:00:00 GMT";
+					
+					
+				}
+				
+				function getCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(nameEQ) != -1) return c.substring(nameEQ.length,c.length);
+				}
+				return null;
+				} 
+				
+                function loadpage(){
+					$.getJSON('http://127.0.0.1:8000/api/jedzenie', function(data) {
+					var filters = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+					if(getCookie("burger")==1){
+						filters[0] = 1;
+						document.getElementById("burger").checked = true;
+					}else{
+						filters[0] = 0;
+						document.getElementById("burger").checked = false;
+					}
+						
+					if(getCookie("wrap")==1){
+						filters[1] = 1;
+						document.getElementById("wrap").checked = true;
+					}else{
+						filters[1] = 0;
+						document.getElementById("wrap").checked = false;
+					}
+
+					if(getCookie("pizza")==1){
+						filters[2] = 1;
+						document.getElementById("pizza").checked = true;
+					}else{
+						filters[2] = 0;
+						document.getElementById("pizza").checked = false;
+					}
+					
+					if(getCookie("fish")==1){
+						filters[3] = 1;
+						document.getElementById("fish").checked = true;
+					}else{
+						filters[3] = 0;
+						document.getElementById("fish").checked = false;
+					}
+					
+					if(getCookie("chicken")==1){
+						filters[4] = 1;
+						document.getElementById("chicken").checked = true;
+					}else{
+						filters[4] = 0;
+						document.getElementById("chicken").checked = false;
+					}
+					
+					if(getCookie("fries")==1){
+						filters[5] = 1;
+						document.getElementById("fries").checked = true;
+					}else{
+						filters[5] = 0;
+						document.getElementById("fries").checked = false;
+					}
+					
+					if(getCookie("salad")==1){
+						filters[6] = 1;
+						document.getElementById("salad").checked = true;
+					}else{
+						filters[6] = 0;
+						document.getElementById("salad").checked = false;
+					}
+					
+					if(getCookie("sweet")==1){
+						filters[7] = 1;
+						document.getElementById("sweet").checked = true;
+					}else{
+						filters[7] = 0;
+						document.getElementById("sweet").checked = false;
+					}
+					
+					if(getCookie("dip")==1){
+						filters[8] = 1;
+						document.getElementById("dip").checked = true;
+					}else{
+						filters[8] = 0;
+						document.getElementById("dip").checked = false;
+					}
+					
+
+					
+						
+					var menuTable = '';
+					var i = 0;
+					for (index in data.content) {
+					//alert(data.content[index].Kategoria-1);
+					if(filters[data.content[index].Kategoria-1]==0 && filters.reduce((a,b)=>a+b)>0){
+					continue;
+					}
+						
+					if(i%3==0){
+						menuTable += '<table style="width:100%;">';
+					}
+					menuTable += '<th style="border: black 1px;">';
+                    //menuTable += '<td>' + data.content[index].pos_id + '</td>';
+					menuTable += '<td>' ;
+					
+					menuTable += '<form method="POST" action="http://127.0.0.1:8000/dodajdokoszyka/'+data.content[index].pos_id+'">';
+					menuTable += '{% csrf_token %}'
+					menuTable += '<img src="data:image/png;base64,'+data.content[index].Obraz+'" style="width:400px; height:400px; width:70%; height:70%; margin-right:1%;" />'
+					menuTable += '<div style="color:white; ">';
+					menuTable += data.content[index].Nazwa;
+					menuTable += '</div>';
+					//menuTable += '<td>' + data.content[index].Id_Restauracji + '</td>';
+					menuTable += '<div style="color:gold; font-size:200%; background:green; width:125px; margin-left:35%;">';
+					menuTable +=  data.content[index].Cena;
+					menuTable += '</div>';
+					
+					menuTable += '<input style="width:70%; height:5vh; font-size:100%;"  type="submit" name="'+data.content[index].pos_id+'" value="Dodaj do koszyka">'
+					menuTable += '</form>'
+					menuTable += '</td>';
+					menuTable += '</th>';
+					//if(i+(2%3)==0){
+					//	menuTable += '</table>';
+					//}
+					i++;
+					//alert(data.content[index].Nazwa);
+					}
+					if(i%3!=0){
+						if((i+2)%3==0)
+						{
+							menuTable += '<th style="border: black 1px;">';
+							menuTable += '</th>';
+							menuTable += '<td style="width:66.6%;">';
+							menuTable += '</td>';
+						}
+						else
+						{
+							menuTable += '<th style="border: black 1px;">';
+							menuTable += '</th>';
+							menuTable += '<td style="width:33%;">';
+							menuTable += '</td>';
+						}
+					}
+						
+							
+					$('#test').append(menuTable);
+					});				
+				}
+
+            </script>
+				</div>
+
+			</div>
+		</section>
+	</article>
+	
+<div style="background:#009999; position:fixed; top:0; left:90%; height: 100%; width:10%; z-index:1;">
+		<form method="GET">
+		<div style="padding-top:110%;">
+		<p style="text-align:center;">Filtry:</p>
+		<p style="text-align:center; width:60%; margin-left:20%; border-bottom: 0.3vw solid lime;"></p>
+		<p style="text-align:center; width:100%;">Burgery<input  type="checkbox" name="burger" id="burger"></p>
+		<p style="text-align:center; width:100%;">Wrapy<input  type="checkbox" name="wrap" id="wrap"></p>
+		<p style="text-align:center; width:100%;">Pizze<input type="checkbox" name="pizza" id="pizza"></p>
+		<p style="text-align:center; width:100%;">Ryby<input  type="checkbox" name="fish" id="fish"></p>
+		<p style="text-align:center; width:100%;">Kurczaki<input  type="checkbox" name="chicken" id="chicken"></p>
+		<p style="text-align:center; width:100%;">Frytki<input  type="checkbox" name="fries" id="fries"></p>
+		<p style="text-align:center; width:100%;">Sałatki<input  type="checkbox" name="salad" id="salad"></p>
+		<p style="text-align:center; width:100%;">Desery<input  type="checkbox" name="sweet" id="sweet"></p>
+		<p style="text-align:center; width:100%;">Sosy<input  type="checkbox" name="dip" id="dip"></p>
+		<p style="text-align:center; width:100%;"><input type="submit" value="znajdź" onclick="doFilter();"></p>
+		<p style="text-align:center; width:60%; margin-left:20%; border-bottom: 0.3vw solid lime;"></p>
+		</div>
+		</form>
+	</div>
+{% endblock  %}

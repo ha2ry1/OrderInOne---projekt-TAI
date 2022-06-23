@@ -1,0 +1,62 @@
+<!--Aplikacja Webowa autorstwa Mateusza Szmyta-->
+{% extends "html/Baza_strony.html" %}
+{% load static %}
+{% block content %}
+<script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>	
+	
+	<article style="position:relative; min-height: 500px;
+	height: auto;">
+		
+		<section style="min-height: 500px;
+	height: auto;">
+			<div class="sign_container">
+				<div class="form_box">
+					<h2 style="padding-top:10%;">Wprowadź dane kontaktowe, abyśmy mogli dostarczyć do ciebie zamówienie</h2>
+						<form method="POST">
+						{% csrf_token %}
+						<table style="margin-left:33.3%;">
+							<tr>
+								<th>Imie</th>
+								<th><input type="text" id="imie" name="imie" required></th>
+							</tr>
+							<tr>
+								<td>Nazwisko</td>
+								<td><input type="text" id="nazwisko" name="nazwisko" required></td>
+							</tr>
+							<tr>
+								<td>Miejscowość</td>
+								<td><input type="text" id="miejscowosc" name="miejscowosc" required></td>
+							</tr>
+							<tr>
+								<td>Ulica</td>
+								<td><input type="text" id="ulica" name="ulica"></td>
+							</tr>
+							<tr>
+								<td>Nr domu</td>
+								<td><input type="text" id="nrdomu" name="nrdomu" required></td>
+							</tr>
+							<tr>
+								<td>Nr mieszkania</td>
+								<td><input type="text" id="nrmieszkania" name="nrmieszkania"></td>
+							</tr>
+							<tr>
+								<td>Telefon kontaktowy</td>
+								<td><input type="text" id="telefon" name="telefon" pattern="[0-9]{9}" required></td>
+							</tr>
+							<tr>
+								<td>Email</td>
+								<td><input type="email" id="email" name="email" required></td>
+							</tr>
+							<tr>
+								<td colspan="2"	><input type="submit" value="zamów" style="width:80%;"></td>
+							</tr>
+						</table>
+						</form>
+				</div>
+
+			</div>
+		</section>
+	</article>
+{% endblock  %}

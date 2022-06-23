@@ -1,0 +1,104 @@
+<!--Aplikacja Webowa autorstwa Mateusza Szmyta-->
+{% extends "html/Baza_strony.html" %}
+{% load static %}
+{% block content %}
+<script src=
+"https://code.jquery.com/jquery-3.5.1.js">
+    </script>	
+	
+	<article style="position:relative; min-height: 500px;
+	height: auto;">
+		
+		<section style="min-height: 500px;
+	height: auto;">
+			<div class="sign_container">
+				<div class="form_box"><!--zmapować id do nazwa produktów-->
+						<h2>Koszyk</h2>
+						{% if request.session.koszyk %}
+							<center>
+							<table id="test" style="border: black solid 1px;">
+							<tr >
+							<th style="border: black solid 1px;">Jedzenie</th>
+							<th style="border: black solid 1px;">Cena jednostkowa</th>
+							<th style="border: black solid 1px;">Ilość</th>
+							<th style="border: black solid 1px;">Razem</th>
+							<th style="border: black solid 1px;">Usuwanie</th>
+							</tr>
+							</table></center>
+							
+							<!--{{ request.session.koszyk }}-->
+							{% for i in request.session.koszyk %}<!--Zamiast tego spróbować operaować na API/JSON'ie-->
+							<!--Zmapować i do obiektów JSona-->
+							<script type="text/javascript">
+							var cena = 0;
+							$.getJSON('http://127.0.0.1:8000/api/jedzenie', function(data) {
+							var student = '';						
+							for (index in data.content) {
+								if(data.content[index].pos_id == {{i.id_produktu}}){
+									
+									student += '<tr style="border: black 1px;">';
+									student += '<td>' ;
+									student += data.content[index].Nazwa;
+									student += '</td>';
+									
+									student += '<td style="text-align:center;">' ;
+									student += data.content[index].Cena;
+									student += '</td>';
+									
+									student += '<td style="text-align:center;">' ;
+									student += {{i.ilosc}};
+									student += '</td>';
+									
+									student += '<td style="text-align:center;">' ;
+									student += ({{i.ilosc}}*data.content[index].Cena).toFixed(2);
+									student += '</td>';
+									
+									student += '<td style="text-align:center;">' ;
+									student += '<form method="POST">' ;
+									student += '{% csrf_token %}';
+									student += '<input style="font-size:100%;"  type="submit" name="'+data.content[index].pos_id+'" value="-">'
+									student += '</form>' ;
+									student += '</td>';
+									
+									
+									student += '</tr>';
+									cena+={{i.ilosc}}*data.content[index].Cena;
+								}	
+							}
+							
+							$('#test').append(student);
+
+							});
+							student = '</table>'
+							$('#test').append(student);
+							</script>
+							{% endfor %}
+							<script type="module">
+							
+							setTimeout(function (){
+  
+							student = '<td style="text-align:center; border: black solid 1px;" colspan=3>' ;
+							student += "Łącznie do zapłaty";
+							student += '</td>';
+							student += '<td style="text-align:center; border: black solid 1px;" colspan=2>' ;
+							student += cena.toFixed(2);
+							student += '</td>';
+							$('#test').append(student);
+            
+							}, 100);
+							
+							</script>
+							<form method="POST">
+							{% csrf_token %}
+							<input type="submit" name="zamowienie" value="Złóż zamówienie" target="_blank">
+							<input type="submit" name="reset" value="Reset zamówienia">
+							</form>
+						{% else %}
+						<h1>Twój koszyk jest pusty</h1>
+						{% endif %}
+				</div>
+
+			</div>
+		</section>
+	</article>
+{% endblock  %}
